@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { ToastrService } from 'src/app/Shared/toastr.service';
+import { Router, ActivatedRoute } from '@angular/router';
+
 
 @Component({
   selector: 'app-event-list',
@@ -6,24 +9,17 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./event-list.component.css']
 })
 export class EventListComponent implements OnInit {
-event1 = {
-    id: 1,
-    name: 'Angular connect',
-    Date: '9/26/2036',
-    Time: '10:10am',
-    price: 654.0,
-    imageUrl: 'assets/images/angularconnect-shield.png',
-    locations: {
-      address: '1057 dt',
-      city: 'London',
-      country: 'England',
-    }
-};
-  constructor() { }
+  events: [];
+  constructor(private router: ActivatedRoute, private toastrService: ToastrService) {}
+
+  tumbnailSucces(name: string) {
+    this.toastrService.success(name);
+  }
+
   handleEvent(data) {
     console.log(data);
   }
   ngOnInit() {
+    this.events = this.router.snapshot.data['events'];
   }
-
 }
