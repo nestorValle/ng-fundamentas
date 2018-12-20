@@ -23,3 +23,10 @@ export interface ISession {
       voters: string[];
 }
 
+export interface IToastr {
+  success(name: string, title?: string): void;
+  info(name: string, title?: string): void;
+  warning(name: string, title?: string): void;
+  error(name: string, title?: string): void;
+}
+

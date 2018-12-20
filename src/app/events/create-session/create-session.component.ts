@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 
 @Component({
@@ -7,6 +7,7 @@ import { FormGroup, FormControl, Validators, AbstractControl } from '@angular/fo
   styleUrls: ['./create-session.component.css']
 })
 export class CreateSessionComponent implements OnInit {
+  @Output() newSessionSave = new EventEmitter();
   newSessionForm: FormGroup;
   name: FormControl;
   presenter: FormControl;
@@ -21,7 +22,7 @@ export class CreateSessionComponent implements OnInit {
     this.presenter = new FormControl('', Validators.required);
     this.duration = new FormControl('', Validators.required);
     this.level = new FormControl('', Validators.required);
-    this.abstract = new FormControl('', [Validators.required, Validators.maxLength(20), this.restrictedWords(['foo', 'not'])]);
+    this.abstract = new FormControl('', [Validators.required, Validators.maxLength(400), this.restrictedWords(['foo', 'not'])]);
 
     this.newSessionForm = new FormGroup({
       name: this.name,
@@ -32,11 +33,10 @@ export class CreateSessionComponent implements OnInit {
     });
   }
   saveSession(formvalues) {
-    console.log(this.abstract.errors);
-    console.log(formvalues);
+    this.newSessionSave.emit(formvalues);
     }
 
-    const restrictedWords = (words: string[]) => {
+     restrictedWords = (words: string[]) => {
        return (control: AbstractControl): {[key: string]: string} => {
                if (control && control.value !== undefined || control.value !== null) {
                 if (!words) { return null; }
@@ -51,5 +51,3 @@ export class CreateSessionComponent implements OnInit {
       };
     }
   }
-
-}

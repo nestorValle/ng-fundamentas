@@ -10,11 +10,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 })
 export class EventListComponent implements OnInit {
   events: [];
-  constructor(private router: ActivatedRoute, private toastrService: ToastrService) {}
-
-  tumbnailSucces(name: string) {
-    this.toastrService.success(name);
-  }
+  constructor(private router: ActivatedRoute) {}
 
   handleEvent(data) {
     console.log(data);

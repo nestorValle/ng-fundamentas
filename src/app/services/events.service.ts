@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-import { IEvent } from '../Shared/event.module';
+import { IEvent, ISession } from '../Shared/event.module';
 @Injectable({
   providedIn: 'root'
 })
@@ -323,5 +323,32 @@ export class EventsService {
   }
   getEvent(id: number) {
     return this.events.find(f => f.id === id);
+  }
+  addSessionToEvent(event: IEvent, session: ISession) {
+    if (event && session) {
+      const nextId = Math.max.apply(null, event.sessions.map(s => s.id));
+      session.id = +nextId + 1;
+      console.log(session);
+      event.sessions.push(session);
+    }
+  }
+  sessionSearch(searchTerm: String): Observable<ISession[]> {
+    const term = searchTerm.toLocaleLowerCase();
+    let results: ISession[] = [];
+
+    this.events.forEach(event => {
+      event.sessions.map((s: any) => {
+        if (s.name.toLocaleLowerCase().indexOf(term) > -1) {
+          s.eventId = event.id;
+          results = results.concat(s);
+        }
+      });
+    });
+
+    const subject = new Subject<ISession[]>();
+    setTimeout(() => {
+      subject.next(results); subject.complete();
+        }, 1000);
+    return subject;
   }
 }

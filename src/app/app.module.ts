@@ -12,6 +12,17 @@ import { NotFound404Component } from './shared/errors/not-found404/not-found404.
 import { EventsResolverService } from './services/events-resolver.service';
 import { CreateSessionComponent } from './events/create-session/create-session.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SessionListComponent } from './events/session-list/session-list.component';
+import { CollapsibleWellComponent } from './Shared/collapsible-well/collapsible-well.component';
+import { DurationPipe } from './Shared/duration.pipe';
+import { TOASTR_TOKEN } from './Shared/toastr.injectorToken';
+import { IToastr } from './Shared/event.module';
+import { ModalComponent } from './Shared/modal/modal.component';
+import { ModalDirective } from './Shared/modal.directive';
+import { JQ_TOKEN } from './Shared/jQuery.injectorToke';
+
+declare let toastr: IToastr;
+const jQuery = window['$'];
 
 @NgModule({
   declarations: [
@@ -22,7 +33,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     EventDetailsComponent,
     CreateEventComponent,
     NotFound404Component,
-    CreateSessionComponent
+    CreateSessionComponent,
+    SessionListComponent,
+    CollapsibleWellComponent,
+    DurationPipe,
+    ModalComponent,
+    ModalDirective
   ],
   imports: [
     BrowserModule,
@@ -31,6 +47,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     ReactiveFormsModule
   ],
   providers: [
+    {
+      provide: TOASTR_TOKEN,
+      useValue: toastr
+    },
+    {
+      provide: JQ_TOKEN,
+      useValue: jQuery
+    },
     EventsResolverService,
     {
       provide: 'canDeactivateEvent',

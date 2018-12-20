@@ -1,7 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
+import { IToastr } from 'src/app/Shared/event.module';
+import { TOASTR_TOKEN } from 'src/app/Shared/toastr.injectorToken';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +14,10 @@ export class ProfileComponent implements OnInit {
   profileForm: FormGroup;
   firstName: FormControl;
   lastName: FormControl;
-  constructor(private router: Router, private loginService: LoginService) { }
+  constructor(
+    private router: Router,
+    private loginService: LoginService,
+    @Inject(TOASTR_TOKEN) private toastr: IToastr) { }
 
   ngOnInit() {
     this.firstName = new FormControl(this.loginService.currentUser.firtName, [Validators.required, Validators.pattern('[a-zA-Z].*')]);
@@ -27,7 +32,7 @@ export class ProfileComponent implements OnInit {
   saveProfile(formGroup) {
     if (this.profileForm.valid) {
         this.loginService.saveProfile(formGroup.firstName, formGroup.lastName);
-        this.router.navigate(['events']);
+        this.toastr.success('Profile Changed');
     }
   }
 
