@@ -20,6 +20,7 @@ import { IToastr } from './Shared/event.module';
 import { ModalComponent } from './Shared/modal/modal.component';
 import { ModalDirective } from './Shared/modal.directive';
 import { JQ_TOKEN } from './Shared/jQuery.injectorToke';
+import { UpvoteComponent } from './events/upvote/upvote.component';
 
 declare let toastr: IToastr;
 const jQuery = window['$'];
@@ -38,7 +39,8 @@ const jQuery = window['$'];
     CollapsibleWellComponent,
     DurationPipe,
     ModalComponent,
-    ModalDirective
+    ModalDirective,
+    UpvoteComponent
   ],
   imports: [
     BrowserModule,
