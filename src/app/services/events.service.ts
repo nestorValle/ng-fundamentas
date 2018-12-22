@@ -1,10 +1,13 @@
 import { Injectable } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 import { IEvent, ISession } from '../Shared/event.module';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError, map, find, first, single } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
 export class EventsService {
+  private apiURL = 'https://ng-events-data.firebaseio.com/';
   events: IEvent[] = [
     {
       id: 1,
@@ -311,25 +314,29 @@ export class EventsService {
       ]
     }
   ];
-
-  constructor() { }
+   httpOptions = {
+    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  };
+  constructor(private httpClient: HttpClient) { }
 
   getEvents(): Observable<IEvent[]> {
-    const subject = new Subject<IEvent[]>();
-    setTimeout(() => {
-      subject.next(this.events); subject.complete();
-        }, 1000);
-    return subject;
+    return this.httpClient.get<IEvent[]>(`${this.apiURL}events.json`)
+    .pipe(catchError(this.handleError));
   }
-  getEvent(id: number) {
-    return this.events.find(f => f.id === id);
+  getEvent(id: number): Observable<IEvent> {
+    const idEvent = id - 1;
+    return this.httpClient.get<IEvent>(`${this.apiURL}events/${idEvent}.json`)
+    .pipe(catchError(this.handleError));
   }
   addSessionToEvent(event: IEvent, session: ISession) {
     if (event && session) {
       const nextId = Math.max.apply(null, event.sessions.map(s => s.id));
       session.id = +nextId + 1;
-      console.log(session);
       event.sessions.push(session);
+      console.log(event);
+
+      return this.httpClient.post<IEvent>(`${this.apiURL}events`, event, this.httpOptions)
+      .pipe(catchError(this.handleError));
     }
   }
   sessionSearch(searchTerm: String): Observable<ISession[]> {
@@ -350,5 +357,9 @@ export class EventsService {
       subject.next(results); subject.complete();
         }, 1000);
     return subject;
+  }
+  private handleError<T>(err: HttpErrorResponse) {
+    console.log(err);
+    return Observable.throw(err);
   }
 }

@@ -13,19 +13,23 @@ export class EventDetailsComponent implements OnInit {
   addMode: boolean;
   filterBy: string;
   sortBy: string;
+  eventId: number;
   constructor(private eventService: EventsService, private route: ActivatedRoute) { }
 
   ngOnInit() {
     this.filterBy = 'all';
-    this.route.params.subscribe(params =>
-      this.event = this.eventService.getEvent(+params['id'])
-      );
+    this.route.data.subscribe(data => {
+      this.event = data['event'];
+      this.addMode = false;
+    });
   }
   addSession() {
     this.addMode = true;
   }
   saveNewSession(session: ISession) {
-    this.eventService.addSessionToEvent(this.event, session);
-    this.addMode = false;
+    this.eventService.addSessionToEvent(this.event, session).subscribe(s => {
+      console.log(s);
+      this.addMode = false;
+    });
   }
 }

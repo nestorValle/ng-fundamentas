@@ -21,6 +21,7 @@ import { ModalComponent } from './Shared/modal/modal.component';
 import { ModalDirective } from './Shared/modal.directive';
 import { JQ_TOKEN } from './Shared/jQuery.injectorToke';
 import { UpvoteComponent } from './events/upvote/upvote.component';
+import { HttpClientModule } from '@angular/common/http';
 
 declare let toastr: IToastr;
 const jQuery = window['$'];
@@ -46,7 +47,8 @@ const jQuery = window['$'];
     BrowserModule,
     AppRoutingModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    HttpClientModule
   ],
   providers: [
     {

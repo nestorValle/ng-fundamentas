@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="event">
     <img [src]="event?.imageUrl" [alt]="event?.name">
 
     <div class="row">
@@ -47,3 +47,4 @@
       </div>
     </div>
   </div>
+</div>
